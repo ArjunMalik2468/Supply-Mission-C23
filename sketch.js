@@ -1,5 +1,7 @@
-var helicopterIMG, helicopterSprite, packageSprite,packageIMG;
-var packageBody,ground
+var helicopterIMG, helicopterSprite, packageSprite, packageIMG;
+var packageBody;
+var box1,box2,box3;
+
 const Engine = Matter.Engine;
 const World = Matter.World;
 const Bodies = Matter.Bodies;
@@ -16,7 +18,7 @@ function setup() {
 	rectMode(CENTER);
 	
 
-	packageSprite=createSprite(width/2, 200, 10,10);
+	packageSprite=createSprite(width/2, 80, 20,20);
 	packageSprite.addImage(packageIMG)
 	packageSprite.scale=0.2
 
@@ -24,69 +26,44 @@ function setup() {
 	helicopterSprite.addImage(helicopterIMG)
 	helicopterSprite.scale=0.6
 
-	groundSprite=createSprite(width/2, height-35, width,10);
-	groundSprite.shapeColor=color(255)
+	//groundSprite=createSprite(width/2, height-35, width,10);
+	//groundSprite.shapeColor=color(255)
 
 
 	engine = Engine.create();
 	world = engine.world;
 
-	packageBody = Bodies.circle(width/2 , 200 , 5 , {restitution:1, isStatic:false});
+	packageBody = Bodies.circle(width/2 , 200 , 20 , {restitution:0.2, isStatic:true});
 	World.add(world, packageBody);
-	
+
 
 	//Create a Ground
-	ground = Bodies.rectangle(width/2, 650, width, 10 , {isStatic:true} );
- 	World.add(world, ground);
+	//ground = Bodies.rectangle(width/2, 650, width, 10 , {isStatic:true} );
+ 	//World.add(world, ground);
 
- 	boxPosition=width/2-100
- 	boxY=610;
-
-
- 	boxleftSprite=createSprite(boxPosition, boxY, 20,100);
- 	boxleftSprite.shapeColor=color(255,0,0);
-
- 	boxLeftBody = Bodies.rectangle(boxPosition+20, boxY, 20,100 , {isStatic:true} );
- 	World.add(world, boxLeftBody);
-
- 	boxBase=createSprite(boxPosition+100, boxY+40, 200,20);
- 	boxBase.shapeColor=color(255,0,0);
-
- 	boxBottomBody = Bodies.rectangle(boxPosition+100, boxY+45-20, 200,20 , {isStatic:true} );
- 	World.add(world, boxBottomBody);
-
- 	boxleftSprite=createSprite(boxPosition+200 , boxY, 20,100);
- 	boxleftSprite.shapeColor=color(255,0,0);
-
- 	boxRightBody = Bodies.rectangle(boxPosition+200-20 , boxY, 20,100 , {isStatic:true} );
- 	World.add(world, boxRightBody);
-
-
+	box2 = new Box(500,650,20,100,"red");
+	box3 = new Box(295,650,20,100,"red");
+	box1 = new Box(400,690,200,20,"red");
+	
 	Engine.run(engine);
-  
 }
 
 
 function draw() {
   rectMode(CENTER);
   background(0);
- 
-  
-  if (keyDown("DOWN_ARROW")) {
-	
-	packageSprite.velocityY = 3;
-  }
-   if (keyDown("RIGHT_ARROW")) {
-	helicopterSprite.x = helicopterSprite.x + 10;
-  }
-   if (keyDown("LEFT_ARROW")) {
-	helicopterSprite.x = helicopterSprite.x - 10;
-  }
-
-  packageSprite.collide(boxBottomBody)
-
+  packageSprite.x= packageBody.position.x 
+  packageSprite.y= packageBody.position.y 
   drawSprites();
- 
+
+	
+  if(keyDown(DOWN_ARROW)) {
+	Matter.Body.setStatic(packageBody,false);
+	}	
+	
+	box1.display();
+	box2.display();
+	box3.display();
+
+  Engine.update(engine);
 }
-
-
